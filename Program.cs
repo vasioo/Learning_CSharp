@@ -1,62 +1,38 @@
 ﻿using System;
-using System.Linq;
 
-namespace SubmatrixInMatrix
+namespace PascalTree
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int biggestSquareRows = 3  ;
-            int biggestSquareCols = 2;
-
-            int[] input = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
-            int rows = input[0];
-            int cols = input[1];
-            int[,] matrix = new int[rows, cols];
-            for (int row = 0; row < matrix.GetLength(0); row++)
+            int n = int.Parse(Console.ReadLine());
+            int[][] pascalTriangle = new int[n][];
+            pascalTriangle[0] = new int[1] { 1 };
+            for (int row = 1; row < n; row++)
             {
-                int[] rowInput = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
-                for (int col = 0; col < rowInput.Length; col++)
+                pascalTriangle[row] = new int[pascalTriangle[row - 1].Length+1];
+                for (int col = 0; col < pascalTriangle[row].Length; col++)
                 {
-                    matrix[row, col] = rowInput[col];
-                }
-            }
-            int maxSum = int.MinValue;
-            int maxRowIndex = 0;
-            int maxColIndex = 0;
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    if (row+biggestSquareRows-1<rows&&col+biggestSquareCols-1<cols)
+                    if (pascalTriangle[row-1].Length>col)
                     {
-                        int sum = 0;
-                        for (int currentRow = row; currentRow < row+biggestSquareRows; currentRow++)
-                        {
-                            for (int currentCol = col; currentCol < col+biggestSquareCols; currentCol++)
-                            {
-                                sum += matrix[currentRow, currentCol];
-                            }
-                        }
-                        if (sum>maxSum)
-                        {
-                            maxSum = sum;
-                            maxColIndex = col;
-                            maxRowIndex = row;
-                        }
+                        pascalTriangle[row][col] += pascalTriangle[row - 1][col];
+                        
+                    }
+                    if (col>0)
+                    {
+                        pascalTriangle[row][col] += pascalTriangle[row - 1][col - 1];
                     }
                 }
             }
-            for (int row = maxRowIndex; row < maxRowIndex+biggestSquareRows; row++)
+            PrintJagged(pascalTriangle);
+        }
+        static void PrintJagged(int[][] jagged)
+        {
+            for (int row = 0; row < jagged.Length; row++)
             {
-                for (int col = maxColIndex; col < maxColIndex+biggestSquareCols; col++)
-                {
-                    Console.Write($"{matrix[row,col]} ");
-                }
-                Console.WriteLine();
+                Console.WriteLine($"{String.Join(" ", jagged[row])}");
             }
-            Console.WriteLine(maxSum);
         }
     }
 }
