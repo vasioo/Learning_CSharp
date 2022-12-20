@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace SequenceOfNames
+namespace ProductShop
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int n = int.Parse(Console.ReadLine());
-            HashSet<string> names = new HashSet<string>();
-
-            for (int i = 0; i < n; i++)
+            Dictionary<string, Dictionary<string, double>> shopUtilities =new Dictionary<string, Dictionary<string, double>>();
+             string items = Console.ReadLine();
+            while (items!="Revision")
             {
-                names.Add(Console.ReadLine());
+                var splitted = items.Split(", ");
+                var shopName = splitted[0];
+                var product = splitted[1];
+                double price = double.Parse(splitted[2]);
+               
+                if (!shopUtilities.ContainsKey(shopName))
+                {
+                    shopUtilities.Add(shopName, new Dictionary<string, double>());
+                }
+                shopUtilities[shopName].Add(product, price);
+                items = Console.ReadLine();
             }
-            foreach (var item in names)
+            shopUtilities = shopUtilities.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            foreach (var shop in shopUtilities)
             {
-                Console.WriteLine(item);
+                Console.WriteLine($"{shop.Key}->");
+                foreach (var item in shop.Value)
+                {
+                    Console.WriteLine($"Product: {item.Key}, Price: {(item.Value)}");
+                }
             }
         }
     }
