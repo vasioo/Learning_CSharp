@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace uniqueUsernames
+namespace VLogger
 {
     class Program
     {
         static void Main(string[] args)
         {
-            double n = double.Parse(Console.ReadLine());
+            List<string> command = Console.ReadLine().Split().ToList();
+            var vloggerName = command[0];
             HashSet<string> set = new HashSet<string>();
-            for (double i = 0; i < n; i++)
+            if (command[1]=="joined")
             {
-                set.Add(Console.ReadLine());
-            }
-            foreach (var item in set)
-            {
-                Console.WriteLine(item);
+                set.Add(command[0]);
             }
         }
     }
