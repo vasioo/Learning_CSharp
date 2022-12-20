@@ -1,47 +1,37 @@
 ﻿using System;
 using System.Linq;
 
-namespace MatricesExercises
+namespace _1._2X2_SquareFinder
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int n = int.Parse(Console.ReadLine());
-            int[,] matrix = new int[n,n];
-
-            int diagonal1 = 0;
-            int diagonal2 = 0;
-            for (int row = 0; row < matrix.GetLength(0); row++)
+            int[] whole = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int rows = whole[0];
+            int cols = whole[1];
+            int[,] matrix = new int[rows, cols];
+            int counterOfFound = 0;
+            for (int row = 0; row < rows; row++)
             {
-                int[] rowInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
-                for (int colo = 0; colo < rowInput.Length; colo++)
+                char[] rowInput = Console.ReadLine().Split().Select(char.Parse).ToArray();
+                for (int colo = 0; colo <cols; colo++)
                 {
                     matrix[row, colo] = rowInput[colo];
                 }
             }
-            //diagonal 1
-            int col = 0;
-            for (int row = 0; row < n; row++)
-            {       
-                diagonal1 += matrix[row, col];
-                col++;
-            }
-            //diagonal2
-            col = 0;
-            for (int row = n-1; row >= 0; row--)
+            for (int row = 0; row < rows-1; row++)
             {
-                diagonal2 += matrix[row, col];
-                col++;
+                for (int col= 0; col < cols-1; col++)
+                {
+                    if (matrix[row,col]==matrix[row,col+1]
+                     && matrix[row+1, col] == matrix[row + 1, col + 1])
+                    {
+                        counterOfFound++;
+                    }
+                }
             }
-            if (diagonal2>diagonal1)
-            {
-                Console.WriteLine(diagonal2-diagonal1);
-            }
-            else
-            {
-                Console.WriteLine(diagonal1-diagonal2);
-            }
+            Console.WriteLine(counterOfFound);
         }
     }
 }
