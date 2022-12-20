@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-namespace Matrices
+
+namespace MatrixColsSum
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[,] matrix = new int[4, 4]
-            {
-                {1,2,3,4 },
-                {5,6,7,8 },
-                {9,10,11,12},
-                {13,14,15,16},
-            };
+            int[] input = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
+            int rows = input[0];
+            int cols = input[1];
 
-            Console.WriteLine($"Rows: {matrix.GetLength(0)}");
-            Console.WriteLine($"Rows: {matrix.GetLength(1)}");
+            int[,] matrix = new int[rows, cols];
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                for (int col = 0; col < matrix.GetLength(1); col++)
+                int[] rowInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
+                for (int col = 0; col < rowInput.Length; col++)
                 {
-                    if (matrix[row,col]<10)
-                    {
-                Console.Write($" {matrix[row, col]} ");
-                    }
-                    else
-                    {
-                        Console.Write($"{matrix[row, col]} ");
-                    }
-                   
+                    matrix[row, col] = rowInput[col];
                 }
-                Console.WriteLine();
+            }
+
+            for (int col = 0; col < matrix.GetLength(1); col++)
+            {
+                int colSum = 0;
+                for (int row = 0; row < matrix.GetLength(0); row++)
+                {
+                    colSum += matrix[row, col];
+                }
+                Console.WriteLine(colSum);
             }
         }
     }
