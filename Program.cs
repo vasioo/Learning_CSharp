@@ -1,38 +1,36 @@
 ﻿using System;
-
-namespace PascalTree
+using System.Linq;
+using System.Collections.Generic;
+namespace MatrixSum
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int n = int.Parse(Console.ReadLine());
-            int[][] pascalTriangle = new int[n][];
-            pascalTriangle[0] = new int[1] { 1 };
-            for (int row = 1; row < n; row++)
+            int[] input = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
+            int rows = input[0];
+            int cols = input[1];
+
+            int[,] matrix = new int[rows, cols];
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                pascalTriangle[row] = new int[pascalTriangle[row - 1].Length+1];
-                for (int col = 0; col < pascalTriangle[row].Length; col++)
+                int[] rowInput = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
+                for (int col = 0; col < matrix.GetLength(1); col++)
                 {
-                    if (pascalTriangle[row-1].Length>col)
-                    {
-                        pascalTriangle[row][col] += pascalTriangle[row - 1][col];
-                        
-                    }
-                    if (col>0)
-                    {
-                        pascalTriangle[row][col] += pascalTriangle[row - 1][col - 1];
-                    }
+                    matrix[row, col] = rowInput[col];
                 }
             }
-            PrintJagged(pascalTriangle);
-        }
-        static void PrintJagged(int[][] jagged)
-        {
-            for (int row = 0; row < jagged.Length; row++)
+            int sum = 0;
+            for (int row = 0; row < rows; row++)
             {
-                Console.WriteLine($"{String.Join(" ", jagged[row])}");
+                for (int col = 0; col < cols; col++)
+                {
+                    sum += matrix[row, col];
+                }
             }
+            Console.WriteLine(matrix.GetLength(0));
+            Console.WriteLine(matrix.GetLength(1));
+            Console.WriteLine(sum);
         }
     }
 }
