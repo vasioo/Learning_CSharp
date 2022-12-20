@@ -1,44 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
-namespace Line_Numbers
+namespace Stream_Files_And_Directories_ex
 {
     class Program
     {
         static void Main(string[] args)
         {
-            using (StreamReader reader = new StreamReader(@"D:\Stream Files And Directories ex\Stream Files And Directories ex\text.txt"))
+           using (StreamReader reader = new StreamReader(@"D:\Stream Files And Directories ex\Stream Files And Directories ex\text.txt"))
             {
-                int index = 0;
-                string lines = reader.ReadLine();
-                    int counter = 0;
-                    int signs =1;
-                
-                foreach (string line in System.IO.File.ReadLines(@"D:\Stream Files And Directories ex\Stream Files And Directories ex\text.txt"))
+                //reversing the Array
+                string text =reader.ReadToEnd();
+                text = text.Replace('-', '@');
+                text = text.Replace(',', '@');
+                text = text.Replace('.', '@');
+                text = text.Replace('!', '@');
+                text = text.Replace('?', '@');
+                string[] newArray = text.Split();
+                Stack<string> listInOrder = new Stack<string>();
+                foreach (var item in newArray)
                 {
-                    index++;
-                    foreach (var item in line)
-                    {
-                        if ((item >= 'a' && item <= 'z') || (item >= 'A' && item <= 'Z'))
-                        {
-                            counter++;
-                        }
-                        else if (item >= '0' && item <= '9')
-                        {
-                            counter++;
-                        }
-                        else
-                        {
-                            if (item != ' ')
-                            {
-                                signs++;
-                            }
-                        }
-                    }
-                    Console.WriteLine($"Line {index}: {lines} ({counter})({signs})");
-                    counter = 0;
-                    signs = 0;
+                    listInOrder.Push(item);
                 }
+                Console.WriteLine(String.Join(" ", listInOrder));
             }
         }
     }
