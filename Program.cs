@@ -1,49 +1,46 @@
 ﻿using System;
 using System.Linq;
 
-namespace MatrixShuffle
+namespace MatricesExercises
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] whole = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            string[,] matrix = new string[whole[0], whole[1]];
-            //chetem
+            int n = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[n,n];
+
+            int diagonal1 = 0;
+            int diagonal2 = 0;
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                string[] rowInput = Console.ReadLine().Split().ToArray();
+                int[] rowInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
                 for (int colo = 0; colo < rowInput.Length; colo++)
                 {
                     matrix[row, colo] = rowInput[colo];
                 }
             }
-            string[] command = Console.ReadLine().Split().ToArray();
-            while (command[0]!="END")
+            //diagonal 1
+            int col = 0;
+            for (int row = 0; row < n; row++)
+            {       
+                diagonal1 += matrix[row, col];
+                col++;
+            }
+            //diagonal2
+            col = 0;
+            for (int row = n-1; row >= 0; row--)
             {
-                command = Console.ReadLine().Split().ToArray();
-                if (command[0]=="swap"&&command.Length==5)
-                {
-                    string temp = matrix[Convert.ToInt32(command[1]), Convert.ToInt32(command[2])];
-                    matrix[Convert.ToInt32(command[1]),Convert.ToInt32(command[2])]
-                        =matrix[Convert.ToInt32(command[3]), Convert.ToInt32(command[4])];
-
-                    matrix[Convert.ToInt32(command[3]), Convert.ToInt32(command[4])]
-                        = temp;
-
-                    for (int row = 0; row <whole[0] ; row++)
-                    {
-                        for (int col = 0; col < whole[1]; col++)
-                        {
-                            Console.Write(matrix[row,col]+" ");
-                        }
-                        Console.WriteLine();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input!");
-                }
+                diagonal2 += matrix[row, col];
+                col++;
+            }
+            if (diagonal2>diagonal1)
+            {
+                Console.WriteLine(diagonal2-diagonal1);
+            }
+            else
+            {
+                Console.WriteLine(diagonal1-diagonal2);
             }
         }
     }
