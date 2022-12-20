@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ReverseAndExclude
+namespace PredicateForNames
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] arrayOfNums = Console.ReadLine().
-                Split().
-                Reverse().
-                Select(int.Parse).
-                ToArray();
             int n = int.Parse(Console.ReadLine());
-            
-            Func<int, int, bool> isDiv = (x, y) => x % y != 0;
-            List<int> stack = arrayOfNums.Where(x=>isDiv(x,n)).ToList();
-            Console.WriteLine(String.Join(" ",stack));
+            string[] names = Console.ReadLine().Split();
+            Func<string,bool> funct = (name)
+                => name.Length <=n;
+            string[] result = names.Where(x => funct(x)).ToArray();
+            Console.WriteLine(String.Join(Environment.NewLine, result)); 
         }
     }
 }
