@@ -2,52 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace _5._FashionBoutique
+namespace _4.FastFood
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] clothesInTheBox = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            Stack<int> stack = new Stack<int>(clothesInTheBox);
-            int capacity = int.Parse(Console.ReadLine());
-            int numberOfRacks = 1;
+            int quantity = int.Parse(Console.ReadLine());
+            int[] orders = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int biggestOrder = 0;
+            int itemMore = 0;
+            Queue<int> queue = new Queue<int>(orders);
+            //biggestOrder
+                List<int> temp = new List<int>();
+                foreach (var item in queue)
+                {
+                    temp.Add(item);
+                }
+                biggestOrder = temp[0];
+                for (int j = 0; j < temp.Count; j++)
+                {
+                    if (temp[j] >= biggestOrder)
+                    {
+                        biggestOrder = temp[j];             
+                    }
+                }
+                Console.WriteLine(biggestOrder);
+            //Function
             int sum = 0;
-            int counter = 0;
-            foreach (var item in stack)
+            bool isItEmpty = true;
+            foreach (var item in temp)
             {
-                counter++;
-                int temp = sum;
-                sum = 0;
-                sum = sum + item;
-                for (int i = 0; i <= (stack.Count - counter); i++)
-                {
-                    sum += clothesInTheBox[i];
-                }
-                if (sum <= capacity)
-                {
-                    numberOfRacks++;
-                    break;
-                }
-                sum = 0;
-                sum = temp;
-                temp = 0;
-                if (sum + item < capacity)
+                if (sum < quantity)
                 {
                     sum += item;
+                    if (sum > quantity)
+                    {
+                        sum -= item;
+                        itemMore += item;
+                        isItEmpty = true;
+                        break;
+                    }
+                    else if (sum <= quantity)
+                    {
+                        isItEmpty = false;
+                    }
                 }
-                else if (sum+item==capacity)
-                {
-                    numberOfRacks++;
-                    sum = 0;
-                }
-                else
-                {
-                    numberOfRacks++;
-                    sum = item;        
-                }
+
             }
-            Console.WriteLine(numberOfRacks);
+            if (isItEmpty==false)
+            {
+                Console.WriteLine("Orders complete");
+            }
+            else if (isItEmpty == true)
+            {
+                Console.WriteLine("Orders left: " + itemMore);
+            }
         }
     }
 }
