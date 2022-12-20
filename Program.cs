@@ -1,33 +1,35 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
-namespace FStreans
+namespace Infos
 {
     class Program
     {
+        public static long ReadDirectory(string path,int indent)
+        {
+            long byteLenght = 0;
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles();
+            Console.WriteLine($"{new string(' ', indent * 3)} {dirInfo.Name}");
+
+            string[] subDirs = Directory.GetDirectories(path);
+            foreach (var subDir in subDirs)
+            {
+                byteLenght+=ReadDirectory(subDir,indent+1);
+            }
+            foreach (var file in files)
+            {
+                Console.WriteLine($"{new string(' ',(indent+1)*3)} {file.Name}");
+                byteLenght += file.Length;
+            }
+            return byteLenght;
+        }
         static void Main(string[] args)
         {
-            //string text = "Pehso";
-            //using (FileStream stream = new FileStream("text.txt",FileMode.OpenOrCreate))
-            //{
-            //    Console.WriteLine(stream.Length);
-            //    stream.Seek(stream.Length, SeekOrigin.Begin);
-            //    byte[] data =Encoding.UTF8.GetBytes(text);
-            //    Console.WriteLine($"{String.Join(",",data)}");
-            //    stream.Write(data,0,data.Length);
-            //}
-            using (FileStream stream = new FileStream("text.txt", FileMode.OpenOrCreate))
-            {
-                byte[] data = new byte[5];
-                while (stream.Read(data,0,data.Length)>0)
-                {
-                    stream.Read(data, 0, data.Length);
-                    string text = Encoding.UTF8.GetString(data);
-                    Console.WriteLine(String.Join(" ", data));
-                    data= new byte[5];
-                }
-            }
+            var dirPath = Console.ReadLine();
+            ReadDirectory(dirPath,0);
+
+            Console.WriteLine($"Size in kbytes: {ReadDirectory(dirPath,0)/1024}");
         }
     }
 }
