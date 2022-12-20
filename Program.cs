@@ -1,55 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-namespace _11.KeyRevolver
+namespace _06.SongsQueue
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int priceOfBullet = int.Parse(Console.ReadLine());
-            int sizeOfGunBarrel = int.Parse(Console.ReadLine());
-            int[] bullets = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            int[] locks = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            int valueOfIntelligence = int.Parse(Console.ReadLine());
-
-            Stack<int> stack = new Stack<int>(bullets);
-            Queue<int> queue = new Queue<int>(locks);
-            int counter = 0;
+            List<string> listOfSongs = Console.ReadLine().
+                Split(", ").
+                ToList();
+           Queue<string> songs = new Queue<string>(listOfSongs);
             while (true)
             {
-                for (int i = 0; i < sizeOfGunBarrel; i++)
+                List<string> command = Console.ReadLine()
+                    .Split(' ').
+                    ToList();
+                
+                if (command[0]=="Play")
                 {
-                    if (stack.Count > 0 && queue.Count > 0 && stack.Peek() > queue.Peek())
+                    if (songs.Count == 0)
                     {
-                        stack.Pop();
-                        Console.WriteLine("Ping!");
-                        counter++;
+                        Console.WriteLine("No more songs!");
+                        break;
                     }
-                    else if (stack.Count > 0 && queue.Count > 0&&stack.Peek() <= queue.Peek())
-                    {
-                        stack.Pop();
-                        queue.Dequeue();
-                        Console.WriteLine("Bang!");
-                        counter++;
-                    }
+                    songs.Dequeue();
+                    
                 }
-                if (queue.Count == 0)
+                if (songs.Count == 0)
                 {
-                    if (stack.Count!=0)
-                    {
-                        Console.WriteLine("Reloading!");
-                    }
-                    Console.WriteLine($"{stack.Count} bullets left. Earned ${valueOfIntelligence - (priceOfBullet * counter)}");
+                    Console.WriteLine("No more songs!");
                     break;
                 }
-                if (stack.Count == 0)
+                else if (command[0]=="Add")
                 {
-                    Console.WriteLine("Couldn't get through. Locks left: " + queue.Count);
-                    break;
+                    command.Remove(command[0]);
+                    string name = "";
+                    foreach (var item in command)
+                    {
+                        name += item+" ";
+                    }         
+                   name= name.TrimEnd(' ');
+                    if (songs.Contains(name))
+                    {
+                        Console.WriteLine($"{name} is already contained!");
+                    }
+                    else
+                    {
+                        songs.Enqueue(name);
+                    }
                 }
-                Console.WriteLine("Reloading!");
+                else if (command[0]=="Show")
+                {
+                    List<string> result = new List<string>();
+                    string resu = "";
+                    foreach (var item in songs)
+                    {
+                        resu += (item + ", ");
+                    }
+                    resu = resu.TrimEnd(' ');
+                    Console.WriteLine(resu.TrimEnd(','));
+                }
             }
         }
     }
