@@ -1,34 +1,31 @@
 ﻿using System;
-using System.Linq;
 
-namespace MatrixColsSum
+namespace jaggedArrays
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] input = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
-            int rows = input[0];
-            int cols = input[1];
+            int rows = int.Parse(Console.ReadLine());
+            int[][] jaggedArray = new int[3][];
 
-            int[,] matrix = new int[rows, cols];
-            for (int row = 0; row < matrix.GetLength(0); row++)
+            for (int row = 0; row < rows; row++)
             {
-                int[] rowInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
-                for (int col = 0; col < rowInput.Length; col++)
+                Console.WriteLine("How many cols for row: "+row);
+                int cols = int.Parse(Console.ReadLine());
+                jaggedArray[row] = new int[cols];
+                for (int col = 0; col < cols; col++)
                 {
-                    matrix[row, col] = rowInput[col];
+                    jaggedArray[row][col] = int.Parse(Console.ReadLine());
                 }
             }
-
-            for (int col = 0; col < matrix.GetLength(1); col++)
+            for (int row = 0; row < jaggedArray.Length; row++)
             {
-                int colSum = 0;
-                for (int row = 0; row < matrix.GetLength(0); row++)
+                for (int col = 0; col < jaggedArray[row].Length; col++)
                 {
-                    colSum += matrix[row, col];
+                    Console.Write($"{jaggedArray[row][col]} ");
                 }
-                Console.WriteLine(colSum);
+                Console.WriteLine();
             }
         }
     }
