@@ -1,67 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace _06.SongsQueue
+
+namespace _5._FashionBoutique
 {
     class Program
     {
         static void Main(string[] args)
         {
-            List<string> listOfSongs = Console.ReadLine().
-                Split(", ").
-                ToList();
-           Queue<string> songs = new Queue<string>(listOfSongs);
-            while (true)
+            int[] clothesInTheBox = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            Stack<int> stack = new Stack<int>(clothesInTheBox);
+            int capacity = int.Parse(Console.ReadLine());
+            int numberOfRacks = 1;
+            int sum = 0;
+            int counter = 0;
+            foreach (var item in stack)
             {
-                List<string> command = Console.ReadLine()
-                    .Split(' ').
-                    ToList();
-                
-                if (command[0]=="Play")
+                counter++;
+                int temp = sum;
+                sum = 0;
+                sum = sum + item;
+                for (int i = 0; i <= (stack.Count - counter); i++)
                 {
-                    if (songs.Count == 0)
-                    {
-                        Console.WriteLine("No more songs!");
-                        break;
-                    }
-                    songs.Dequeue();
-                    
+                    sum += clothesInTheBox[i];
                 }
-                if (songs.Count == 0)
+                if (sum <= capacity)
                 {
-                    Console.WriteLine("No more songs!");
+                    numberOfRacks++;
                     break;
                 }
-                else if (command[0]=="Add")
+                sum = 0;
+                sum = temp;
+                temp = 0;
+                if (sum + item < capacity)
                 {
-                    command.Remove(command[0]);
-                    string name = "";
-                    foreach (var item in command)
-                    {
-                        name += item+" ";
-                    }         
-                   name= name.TrimEnd(' ');
-                    if (songs.Contains(name))
-                    {
-                        Console.WriteLine($"{name} is already contained!");
-                    }
-                    else
-                    {
-                        songs.Enqueue(name);
-                    }
+                    sum += item;
                 }
-                else if (command[0]=="Show")
+                else if (sum+item==capacity)
                 {
-                    List<string> result = new List<string>();
-                    string resu = "";
-                    foreach (var item in songs)
-                    {
-                        resu += (item + ", ");
-                    }
-                    resu = resu.TrimEnd(' ');
-                    Console.WriteLine(resu.TrimEnd(','));
+                    numberOfRacks++;
+                    sum = 0;
+                }
+                else
+                {
+                    numberOfRacks++;
+                    sum = item;        
                 }
             }
+            Console.WriteLine(numberOfRacks);
         }
     }
 }
