@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 
-namespace SortingEvenNums
+namespace SumNumbers
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] numbers = Console.ReadLine().Split(", ").Select(int.Parse).ToArray();
-            numbers = numbers.Where(x => x % 2 == 0).OrderBy(x=>x).ToArray();
-            Console.WriteLine(String.Join(", ",numbers));
-            
+            Func<string, int> parser = x => int.Parse(x);
+            var numbers = Console.ReadLine().Split(", ").Select(parser).ToArray();
+            Console.WriteLine(numbers.Length);
+            Console.WriteLine(numbers.Sum());
         }
     }
 }
