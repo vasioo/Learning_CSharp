@@ -1,35 +1,33 @@
 ﻿using System;
 using System.IO;
-
-namespace Infos
+namespace SplittingAStream
 {
     class Program
     {
-        public static long ReadDirectory(string path,int indent)
-        {
-            long byteLenght = 0;
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
-            FileInfo[] files = dirInfo.GetFiles();
-            Console.WriteLine($"{new string(' ', indent * 3)} {dirInfo.Name}");
-
-            string[] subDirs = Directory.GetDirectories(path);
-            foreach (var subDir in subDirs)
-            {
-                byteLenght+=ReadDirectory(subDir,indent+1);
-            }
-            foreach (var file in files)
-            {
-                Console.WriteLine($"{new string(' ',(indent+1)*3)} {file.Name}");
-                byteLenght += file.Length;
-            }
-            return byteLenght;
-        }
         static void Main(string[] args)
         {
-            var dirPath = Console.ReadLine();
-            ReadDirectory(dirPath,0);
-
-            Console.WriteLine($"Size in kbytes: {ReadDirectory(dirPath,0)/1024}");
+            int bytes = 1;
+            Console.WriteLine("How many parts do you want?");
+            int n = int.Parse(Console.ReadLine());
+            using (FileStream stream = new FileStream("../../../text.txt", FileMode.Open))
+            {
+                long fileLenght = (long)stream.Length / n;
+                for (int i = 0; i < n; i++)
+                {
+                    int readBytes = 0;
+                    using (FileStream newFile = new FileStream($"../../../text{i}.txt",FileMode.Create))
+                    {
+                        while (readBytes<fileLenght)
+                        {
+                            var data = new byte[bytes];
+                            stream.Read(data, 0, data.Length);
+                            newFile.Write(data, 0, data.Length);
+                            readBytes += data.Length;
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
