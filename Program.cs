@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 
-namespace Add_Vat
+namespace CountUpperCase
 {
     class Program
     {
         static void Main(string[] args)
         {
-            
-           List<decimal> prices = Console.ReadLine().Split(", ").Select(decimal.Parse).ToList();
-            Func<decimal, decimal> vatAdder = x => x + x * 0.2m;
-            prices = prices.Select(vatAdder).ToList();
-            prices.ForEach(n => Console.WriteLine($"{n:f2}"));
-
+            string[] words = Console.ReadLine().Split(new char[] { ' ' },
+                StringSplitOptions.RemoveEmptyEntries);
+            Func<string, bool> isStartingWithCapital = w => Char.IsUpper(w[0]);
+            Console.WriteLine(String.Join("\n",words.Where(isStartingWithCapital)));
         }
     }
 }
