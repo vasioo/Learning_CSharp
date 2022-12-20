@@ -1,66 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace FilterByAge
+namespace FilterByBetter
 {
+    class Student
+    {
+        public Student(string name, int age)
+        {
+            this.Name = name;
+            this.Age = age;
+        }
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
     class Program
     {
         static void Main(string[] args)
         {
+            List<Student> students = new List<Student>();
             int n = int.Parse(Console.ReadLine());
-            Dictionary<string, int> saver = new Dictionary<string, int>();
             for (int i = 0; i < n; i++)
             {
-                string[] people = Console.ReadLine().Split(", ");
-                saver.Add(people[0],Convert.ToInt32(people[1]));
+                string[] input = Console.ReadLine().Split(", ");
+                students.Add(new Student(input[0], int.Parse(input[1])));
             }
-            string command = Console.ReadLine();
-            int checker = 0;
-            if (command=="older")
+            string filterInput = Console.ReadLine();
+            int ageFilter = int.Parse(Console.ReadLine());
+            string formatInput = Console.ReadLine();
+
+            Func<Student,int, bool> filter = GetFilter(filterInput);
+            students = students.Where(x => filter(x, ageFilter)).ToList();
+            Action<Student> printer = GetPrinter(formatInput);
+            students.ForEach(printer);
+        }
+
+        private static Action<Student> GetPrinter(string formatInput)
+        {
+            switch (formatInput)
             {
-                checker = int.Parse(Console.ReadLine());
-                string whatToPrint = Console.ReadLine();
-                foreach (var item in saver)
-                {
-                    if (item.Value>=checker)
-                    {
-                        if (whatToPrint=="name")
-                        {
-                            Console.WriteLine($"{item.Key}");
-                        }
-                        if (whatToPrint == "age")
-                        {
-                            Console.WriteLine($"{item.Value}");
-                        }
-                        if (whatToPrint == "name age")
-                        {
-                            Console.WriteLine($"{item.Key} - {item.Value}");
-                        }
-                    }
-                }
+                case "name": return s => Console.WriteLine(s.Name);
+                case "age": return s => Console.WriteLine(s.Age);
+                case "name age": return s => Console.WriteLine($"{s.Name} - {s.Age}");
+                default: return null;
             }
-            if (command=="younger")
+        }
+
+        private static Func<Student,int, bool> GetFilter(string filterInput)
+        {
+            switch (filterInput)
             {
-                checker = int.Parse(Console.ReadLine());
-                string whatToPrint = Console.ReadLine();
-                foreach (var item in saver)
-                {
-                    if (item.Value < checker)
-                    {    
-                        if (whatToPrint == "name")
-                        {
-                            Console.WriteLine($"{item.Key}");
-                        }
-                        if (whatToPrint == "age")
-                        {
-                            Console.WriteLine($"{item.Value}");
-                        }
-                        if (whatToPrint == "name age")
-                        {
-                            Console.WriteLine($"{item.Key} - {item.Value}");
-                        }
-                    }
-                }
+                case "older": return (s, age) => s.Age >= age;
+                case "younger": return (s, age) => s.Age < age;
+                default:
+                    return null;
             }
         }
     }
