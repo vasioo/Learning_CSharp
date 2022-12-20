@@ -1,149 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-namespace Miner
+
+namespace MatrixShuffle
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int fieldSize = int.Parse(Console.ReadLine());
-            int[,] matrix = new int[fieldSize, fieldSize];
-            int rowOfMiner = 0;
-            int colOfMiner = 0;
-            List<string> listOfMovements = Console.ReadLine().Split().ToList();
-            int coal = 0;
-            int endRow = 0;
-            int endCol = 0;
-            for (int row = 0; row < fieldSize; row++)
+            int[] whole = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            string[,] matrix = new string[whole[0], whole[1]];
+            //chetem
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                char[] rowInput = Console.ReadLine().Split().Select(char.Parse).ToArray();
-                for (int col = 0; col< fieldSize; col++)
+                string[] rowInput = Console.ReadLine().Split().ToArray();
+                for (int colo = 0; colo < rowInput.Length; colo++)
                 {
-                    matrix[row, col] = rowInput[col];
-                    if (matrix[row,col]=='c')
-                    {
-                        coal++;
-                    }
-                    if (matrix[row,col]=='e')
-                    {
-                        endRow = row;
-                        endCol = col;
-                    }
-                    if (matrix[row, col] == 's')
-                    {
-                        rowOfMiner = row;
-                        colOfMiner = col;
-                    }
+                    matrix[row, colo] = rowInput[colo];
                 }
             }
-            Queue<string> queue = new Queue<string>(listOfMovements);
-            string shouldIStop = "no";
-            string result = "";
-            for (int i = 0; i < listOfMovements.Count; i++)
-            {    
-                if (queue.Peek() == "up")
-                {
-                    if (rowOfMiner - 1 >= 0)
-                    {
-                        rowOfMiner -= 1;
-                        if (matrix[rowOfMiner, colOfMiner] == 'c')
-                        {
-                            coal--;
-                            matrix[rowOfMiner, colOfMiner] = '*';
-                            if (coal == 0)
-                            {
-                                result=$"You collected all coals! ({rowOfMiner}, {colOfMiner})";
-                                shouldIStop = "yes";
-                            }
-                        }
-                        if (matrix[rowOfMiner, colOfMiner] == 'e')
-                        {
-                            result=$"Game over! ({rowOfMiner}, {colOfMiner})";
-                            shouldIStop = "yes";
-                        }
-                    }
-                }
-                else if (queue.Peek() == "down")
-                {
-                    if (rowOfMiner + 1 < fieldSize)
-                    {
-                        rowOfMiner += 1;
-                        if (matrix[rowOfMiner, colOfMiner] == 'c')
-                        {
-                            coal--;
-                            matrix[rowOfMiner, colOfMiner] = '*';
-                            if (coal == 0)
-                            {
-                                result = $"You collected all coals! ({rowOfMiner}, {colOfMiner})";
-                                shouldIStop = "yes";
-                            }
-                        }
-                        if (matrix[rowOfMiner, colOfMiner] == 'e')
-                        {
-                            result =$"Game over! ({rowOfMiner}, {colOfMiner})";
-                            shouldIStop = "yes";
-                        }
-                    }
-                }
-                else if (queue.Peek() == "left")
-                {
-                    if (colOfMiner - 1 >= 0)
-                    {
-                        colOfMiner -= 1;
-                        if (matrix[rowOfMiner, colOfMiner] == 'c')
-                        {
-                            coal--;
-                            matrix[rowOfMiner, colOfMiner] = '*';
-                            if (coal == 0)
-                            {
-                                result = $"You collected all coals! ({rowOfMiner}, {colOfMiner})";
-                                shouldIStop = "yes";
-                            }
-                        }
-                        if (matrix[rowOfMiner, colOfMiner] == 'e')
-                        {
-                            result = $"Game over! ({rowOfMiner}, {colOfMiner})";
-                            shouldIStop = "yes";
-                        }
-                    }
-                }
-                else if (queue.Peek() == "right")
-                {
-                    if (colOfMiner + 1 < fieldSize)
-                    {
-                        colOfMiner += 1;
-                        if (matrix[rowOfMiner, colOfMiner] == 'c')
-                        {
-                            coal--;
-                            matrix[rowOfMiner, colOfMiner] = '*';
-                            if (coal == 0)
-                            {
-                                result = $"You collected all coals! ({rowOfMiner}, {colOfMiner})";
-                                shouldIStop = "yes";
-                            }
-                        }
-                        if (matrix[rowOfMiner, colOfMiner] == 'e')
-                        {
-                            result = $"Game over! ({rowOfMiner}, {colOfMiner})";
-                            shouldIStop = "yes";
-                        }
-                    }
-                }
-                if (shouldIStop=="yes")
-                {
-                    break;
-                }
-                queue.Dequeue();
-                
-            }
-            if (shouldIStop == "no")
+            string[] command = Console.ReadLine().Split().ToArray();
+            while (command[0]!="END")
             {
-                Console.WriteLine($"{coal} coals left. ({rowOfMiner}, {colOfMiner})");
-            }
-            if (shouldIStop=="yes")
-            {
-                Console.WriteLine(result);
+                command = Console.ReadLine().Split().ToArray();
+                if (command[0]=="swap"&&command.Length==5)
+                {
+                    string temp = matrix[Convert.ToInt32(command[1]), Convert.ToInt32(command[2])];
+                    matrix[Convert.ToInt32(command[1]),Convert.ToInt32(command[2])]
+                        =matrix[Convert.ToInt32(command[3]), Convert.ToInt32(command[4])];
+
+                    matrix[Convert.ToInt32(command[3]), Convert.ToInt32(command[4])]
+                        = temp;
+
+                    for (int row = 0; row <whole[0] ; row++)
+                    {
+                        for (int col = 0; col < whole[1]; col++)
+                        {
+                            Console.Write(matrix[row,col]+" ");
+                        }
+                        Console.WriteLine();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input!");
+                }
             }
         }
     }
