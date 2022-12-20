@@ -1,31 +1,51 @@
 ﻿using System;
+using System.Linq;
 
-namespace jaggedArrays
+namespace JaggedArrayModification
 {
     class Program
     {
         static void Main(string[] args)
         {
             int rows = int.Parse(Console.ReadLine());
-            int[][] jaggedArray = new int[3][];
-
+            int[][] jagged = ReadJaggedArray(rows);
+            string command = Console.ReadLine();
+            while (command!="END")
+            {
+                var input = command.Split();
+                int row = int.Parse(input[1]);
+                int col = int.Parse(input[2]);
+                int value = int.Parse(input[3]);
+                if (row < 0 || col < 0||row >= jagged.Length||col>= jagged[row].Length)
+                {
+                    Console.WriteLine("Invalid coordinates");
+                }
+                else if (input[0]=="Add")
+                {
+                    jagged[row][col] += value;
+                }
+                else if (input[0]=="Subtract")
+                {
+                    jagged[row][col] -= value;
+                }
+                command = Console.ReadLine();
+            }
+            PrintJagged(jagged);
+        }
+        static int[][] ReadJaggedArray(int rows)
+        {
+            int[][] jagged = new int[rows][];
             for (int row = 0; row < rows; row++)
             {
-                Console.WriteLine("How many cols for row: "+row);
-                int cols = int.Parse(Console.ReadLine());
-                jaggedArray[row] = new int[cols];
-                for (int col = 0; col < cols; col++)
-                {
-                    jaggedArray[row][col] = int.Parse(Console.ReadLine());
-                }
+                jagged[row] = Console.ReadLine().Split().Select(int.Parse).ToArray();
             }
-            for (int row = 0; row < jaggedArray.Length; row++)
+            return jagged;
+        }
+        static void PrintJagged(int[][] jagged)
+        {
+            for (int row = 0; row < jagged.Length; row++)
             {
-                for (int col = 0; col < jaggedArray[row].Length; col++)
-                {
-                    Console.Write($"{jaggedArray[row][col]} ");
-                }
-                Console.WriteLine();
+                Console.WriteLine($"{String.Join(" ",jagged[row])}");
             }
         }
     }
