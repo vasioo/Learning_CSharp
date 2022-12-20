@@ -1,51 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace JaggedArrayModification
+namespace SnakeMoves
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int rows = int.Parse(Console.ReadLine());
-            int[][] jagged = ReadJaggedArray(rows);
-            string command = Console.ReadLine();
-            while (command!="END")
+            int[] dimentions = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            string snake = Console.ReadLine();
+            char[,] matrix = new char[dimentions[0], dimentions[1]];
+
+            bool rightToLeft = true;
+            int indexOfLastSymbol = 0;
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                var input = command.Split();
-                int row = int.Parse(input[1]);
-                int col = int.Parse(input[2]);
-                int value = int.Parse(input[3]);
-                if (row < 0 || col < 0||row >= jagged.Length||col>= jagged[row].Length)
+                if (rightToLeft)
                 {
-                    Console.WriteLine("Invalid coordinates");
+                    for (int col = 0; col < matrix.GetLength(1); col++)
+                    {
+                        matrix[row, col] = snake[indexOfLastSymbol++];
+                        if (indexOfLastSymbol==snake.Length)
+                        {
+                            indexOfLastSymbol = 0;
+                        }
+                    }
+                    rightToLeft = false;
                 }
-                else if (input[0]=="Add")
+                else
                 {
-                    jagged[row][col] += value;
+                    for (int col = matrix.GetLength(1)-1; col >= 0; col--)
+                    {
+                        matrix[row, col] = snake[indexOfLastSymbol++];
+                        if (indexOfLastSymbol == snake.Length)
+                        {
+                            indexOfLastSymbol = 0;
+                        }
+                    }
+                    rightToLeft = true;
                 }
-                else if (input[0]=="Subtract")
-                {
-                    jagged[row][col] -= value;
-                }
-                command = Console.ReadLine();
             }
-            PrintJagged(jagged);
-        }
-        static int[][] ReadJaggedArray(int rows)
-        {
-            int[][] jagged = new int[rows][];
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                jagged[row] = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            }
-            return jagged;
-        }
-        static void PrintJagged(int[][] jagged)
-        {
-            for (int row = 0; row < jagged.Length; row++)
-            {
-                Console.WriteLine($"{String.Join(" ",jagged[row])}");
+                for (int col = 0; col < matrix.GetLength(1); col++)
+                {
+                    Console.Write(matrix[row,col]);
+                }
+                Console.WriteLine();
             }
         }
     }
