@@ -1,31 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
-namespace Stream_Files_And_Directories_ex
+namespace BaseStreams
 {
     class Program
     {
         static void Main(string[] args)
         {
-           using (StreamReader reader = new StreamReader(@"D:\Stream Files And Directories ex\Stream Files And Directories ex\text.txt"))
-            {
-                //reversing the Array
-                string text =reader.ReadToEnd();
-                text = text.Replace('-', '@');
-                text = text.Replace(',', '@');
-                text = text.Replace('.', '@');
-                text = text.Replace('!', '@');
-                text = text.Replace('?', '@');
-                string[] newArray = text.Split();
-                Stack<string> listInOrder = new Stack<string>();
-                foreach (var item in newArray)
-                {
-                    listInOrder.Push(item);
-                }
-                Console.WriteLine(String.Join(" ", listInOrder));
-            }
+            MemoryStream stream = new MemoryStream();
+            byte[] buffer = new byte[] { 1, 2, 3, 4, 5 };
+            stream.Write(buffer, 0, buffer.Length);
+            byte[] read = new byte[buffer.Length];
+            stream.Seek(0, SeekOrigin.Begin);
+            stream.Read(read, 0,(int) stream.Length);
+
+            Console.WriteLine(String.Join(" ",read));
         }
     }
 }
