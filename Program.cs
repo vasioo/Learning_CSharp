@@ -1,22 +1,19 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
-namespace Action1
+namespace Add_Vat
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var list = new List<int>() { 1, 2, 3, 4, 5 };
+            
+           List<decimal> prices = Console.ReadLine().Split(", ").Select(decimal.Parse).ToList();
+            Func<decimal, decimal> vatAdder = x => x + x * 0.2m;
+            prices = prices.Select(vatAdder).ToList();
+            prices.ForEach(n => Console.WriteLine($"{n:f2}"));
 
-            Iterate(list, x => Console.WriteLine(x));
-        }
-        public static void Iterate(List<int> list, Action<int> callback)
-        {
-            foreach (var item in list)
-            {
-                callback(item);
-            }
         }
     }
 }
