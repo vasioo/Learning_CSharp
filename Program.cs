@@ -1,24 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CustomLists
+namespace ImplementingLinkedListsAndStacksAndQueues
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            CustomList customList = new CustomList();
-            customList.Add(1);
-            customList.Add(2);
-            customList.Add(3);
-            customList.Add(4);
-            customList.Add(5);
-            customList.Shrink();
-            int element = customList.RemoveAt(2);
-            Console.WriteLine(element);
-            Console.WriteLine(customList.Count);
-            customList.Contains(5);
-            customList.Swap(0, 1);
+            DoublyLinkedList linked = new DoublyLinkedList();
+
+            linked.AddFirst(new Node(1));
+            linked.AddFirst(new Node(2));
+            linked.AddFirst(new Node(3));
+
+            linked.AddLast(new Node(1));
+            linked.AddLast(new Node(2));
+            linked.AddLast(new Node(3));
+
+            linked.ForEach(node =>
+            {
+                Console.WriteLine(node.Value);
+            });
+            Console.WriteLine("Reversed: ");
+            linked.Reverse();
+            linked.ForEach(node =>
+            {
+                Console.WriteLine(node.Value);
+            });
+            //foreach (var node in linked.ToArray())
+            //{
+            //    Console.WriteLine("In foreach");
+            //    Console.WriteLine(node.Value);
+            //}
         }
     }
 }
