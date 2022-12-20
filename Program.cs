@@ -2,62 +2,91 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace _4.FastFood
+namespace _03_MaximumAndMinimumElement
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int quantity = int.Parse(Console.ReadLine());
-            int[] orders = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            int biggestOrder = 0;
-            int itemMore = 0;
-            Queue<int> queue = new Queue<int>(orders);
-            //biggestOrder
-                List<int> temp = new List<int>();
-                foreach (var item in queue)
-                {
-                    temp.Add(item);
-                }
-                biggestOrder = temp[0];
-                for (int j = 0; j < temp.Count; j++)
-                {
-                    if (temp[j] >= biggestOrder)
-                    {
-                        biggestOrder = temp[j];             
-                    }
-                }
-                Console.WriteLine(biggestOrder);
-            //Function
-            int sum = 0;
-            bool isItEmpty = true;
-            foreach (var item in temp)
+            int N = int.Parse(Console.ReadLine());
+            Stack<int> stack = new Stack<int>();
+            List<string> result = new List<string>();
+            for (int i = 0; i < N; i++)
             {
-                if (sum < quantity)
+                int smallestNumber = 0;
+                int biggestNumber = 0;
+                List<int> temp = new List<int>();
+                List<int> list = Console.ReadLine().Split().Select(int.Parse).ToList();
+                int command =list[0];
+                if (command==1)
                 {
-                    sum += item;
-                    if (sum > quantity)
+                    int element = list[1];
+                    stack.Push(element);
+                }
+                if (command == 2&& stack.Count>0)
+                {
+                    stack.Pop();
+                }
+                if (command == 3)
+                {
+                    if (stack.Count == 0)
                     {
-                        sum -= item;
-                        itemMore += item;
-                        isItEmpty = true;
-                        break;
+                        return;
                     }
-                    else if (sum <= quantity)
+                    else
                     {
-                        isItEmpty = false;
+                        foreach (var item in stack)
+                        {
+                            temp.Add(item);
+                        }
+                        biggestNumber = temp[0];
+                        for (int j = 0; j < temp.Count; j++)
+                        {
+                            if (temp[j] >= biggestNumber)
+                            {
+                                biggestNumber = temp[j];
+                            }
+                        }
+                       result.Add(biggestNumber.ToString());
+                    }
+                }
+                if (command == 4)
+                {
+                    if (stack.Count == 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        foreach (var item in stack)
+                        {
+                            temp.Add(item);
+                        }
+                        smallestNumber = temp[0];
+                        for (int j = 0; j < temp.Count; j++)
+                        {
+                            if (temp[j] <= smallestNumber)
+                            {
+                                smallestNumber = temp[j];
+                            }
+                        }
+                        result.Add(smallestNumber.ToString());
                     }
                 }
 
             }
-            if (isItEmpty==false)
+            string resu = "";
+            foreach (var item in stack)
             {
-                Console.WriteLine("Orders complete");
+                 resu +=(item+", ");
             }
-            else if (isItEmpty == true)
+            resu =resu.TrimEnd(' ');
+            result.Add(resu.TrimEnd(','));
+            foreach (var item in result)
             {
-                Console.WriteLine("Orders left: " + itemMore);
+                Console.WriteLine(item);
             }
         }
+        
     }
 }
