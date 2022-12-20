@@ -1,30 +1,28 @@
 ﻿using System;
-namespace FunctionalProgramming
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Lambda
 {
     class Program
     {
-        static int PromotionsCountToday = 0;
         static void Main(string[] args)
         {
-            Console.WriteLine(GetPromotion(100));
+            List<int> numbers = new List<int>() { 1, 2, 3, 4, 5 };
+            numbers= numbers.Where(x => x > 3).ToList();
+            //edno i sushto e
+            //numbers= numbers.Where(IsBigger).ToList();
+            //numbers= numbers.Select(Multiply).ToList();
+            numbers= numbers.Where(x=> { return x > 3; }).ToList();
+            Console.WriteLine(String.Join(",",numbers));
         }
-        public static decimal GetPromotion(decimal price)
+        public static bool IsBigger(int x) 
         {
-            if (PromotionsCountToday<3)
-            {
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
-                {
-                    PromotionsCountToday++;
-                    return price - price * 0.2m;
-                }
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
-                {
-                    PromotionsCountToday++;
-                    return price - price * 0.2m;
-                }
-            }
-            
-            return price;
+            return x > 3;
+        }
+        public static int Multiply(int x)
+        {
+            return x * 5;
         }
     }
 }
